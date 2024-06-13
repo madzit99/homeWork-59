@@ -1,4 +1,12 @@
-const Form = () => {
+import React, { useState } from "react";
+
+interface Props {
+  onAdd: (name: string) => void;
+}
+
+const Form: React.FC<Props> = ({ onAdd }) => {
+  const [movieName, setMovieName] = useState<string>("");
+
   return (
     <div>
       <label htmlFor="movieInput" className="form-label">
@@ -6,7 +14,7 @@ const Form = () => {
       </label>
       <div className="input-container d-flex gap-3 align-items-center">
         <input type="text" className="form-control my-3" />
-        <button className="btn btn-success">Добавить</button>
+        <button onClick={() => onAdd(movieName)} className="btn btn-success">Добавить</button>
       </div>
     </div>
   );
