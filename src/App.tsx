@@ -1,7 +1,9 @@
-import { useCallback, useState } from "react";
+import { useCallback, useState, useEffect } from "react";
 import Form from "./Components/Form/Form";
 import { Movie } from "./types";
 import MovieCard from "./Components/MovieCard/MovieCard";
+
+const url = "https://api.chucknorris.io/jokes/random";
 
 const App = () => {
   const [movies, setMovies] = useState<Movie[]>([]);
@@ -26,6 +28,21 @@ const App = () => {
     setMovies((prevMovies) => prevMovies.filter((movie) => movie.id !== id));
   }, []);
 
+  const [joke, setJoke] = useState<string>("");
+
+  const fetchJoke = useCallback(async () => {
+    const response = await fetch(url);
+
+    if (response.ok) {
+      const data = await response.json();
+      setJoke(data.value);
+    }
+  }, []);
+
+  useEffect(() => {
+    void fetchJoke();
+  }, [fetchJoke]);
+
   return (
     <>
       <div className="container w-50">
@@ -39,7 +56,14 @@ const App = () => {
             />
           ))}
         </div>
-        <div className="task2"></div>
+        <hr />
+        <div className="task2">
+          <div>{joke}</div>
+          <hr />
+          <button className="btn btn-primary" onClick={fetchJoke}>
+            Создать новую шутку
+          </button>
+        </div>
       </div>
     </>
   );
